@@ -38,13 +38,15 @@ android {
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    compileOnly("de.robv.android.xposed:api:82")
+    compileOnly(libs.xposed.api)
     compileOnly("de.robv.android.xposed:api:82:sources")
-    compileOnly("com.android.volley:volley:1.2.1")
-    compileOnly("com.squareup.okhttp3:okhttp:4.10.0")
+    compileOnly(libs.volley)
+    compileOnly(libs.okhttp)
 
-    implementation("io.insert-koin:koin-core:3.5.3")
+    implementation(libs.koin.core)
     implementation(libs.material)
 
     testImplementation(libs.junit)
+
+    androidTestImplementation(libs.androidx.test.ext.junit)
 }

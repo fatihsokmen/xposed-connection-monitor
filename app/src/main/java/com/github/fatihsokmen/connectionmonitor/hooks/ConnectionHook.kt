@@ -1,6 +1,8 @@
 package com.github.fatihsokmen.connectionmonitor.hooks
 
-interface ConnectionHook {
+import org.koin.core.component.KoinComponent
+
+interface ConnectionHook : KoinComponent {
 
     fun install()
 }

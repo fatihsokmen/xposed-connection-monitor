@@ -8,6 +8,6 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 fun hooks(classLoader: ClassLoader): Module = module {
-    single { UrlConnectionHook(classLoader) } bind ConnectionHook::class
-    single { OkkHttpConnectionHook(classLoader) } bind ConnectionHook::class
+    single { UrlConnectionHook(classLoader, get()) } bind ConnectionHook::class
+    single { OkkHttpConnectionHook(classLoader, get()) } bind ConnectionHook::class
 }

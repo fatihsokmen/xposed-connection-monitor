@@ -19,9 +19,10 @@ class UrlConnectionMonitorModule : IXposedHookLoadPackage, KoinComponent {
     }
 
     private fun installHooks() {
-        getKoin().getAll<ConnectionHook>().forEach {
-            XposedBridge.log(">>> Installing $it")
-            it.install()
-        }
+        getKoin().getAll<ConnectionHook>()
+            .forEach {
+                XposedBridge.log(">>> Installing hook: $it")
+                it.install()
+            }
     }
 }

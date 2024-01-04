@@ -1,14 +1,14 @@
 package com.github.fatihsokmen.connectionmonitor.hooks
 
-import android.app.AndroidAppHelper
-import de.robv.android.xposed.XC_MethodHook
+import com.github.fatihsokmen.connectionmonitor.loggers.UrlLogger
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
+import de.robv.android.xposed.XC_MethodHook as MethodHook
 
-class OkkHttpConnectionHook(private val classLoader: ClassLoader) : ConnectionHook {
+class OkkHttpConnectionHook(private val classLoader: ClassLoader, private val logger: UrlLogger) :
+    ConnectionHook {
 
     override fun install() {
-        XposedBridge.log(">>> Running: OkkHttpConnectionHook.install")
         val exchange = XposedHelpers.findClassIfExists(
             "okhttp3.internal.connection.Exchange",
             classLoader
@@ -18,15 +18,13 @@ class OkkHttpConnectionHook(private val classLoader: ClassLoader) : ConnectionHo
             exchange,
             "writeRequestHeaders",
             "okhttp3.Request",
-            object : XC_MethodHook() {
+            object : MethodHook() {
                 override fun beforeHookedMethod(param: MethodHookParam?) {
                     try {
-                        // Get the okhttp3.HttpUrl object from the Request
                         val url = XposedHelpers.getObjectField(param!!.args[0], "url").toString()
-                        XposedBridge.log("URL: $url")
-                        XposedBridge.log(AndroidAppHelper.currentApplication().packageName)
+                        logger.log(url)
                     } catch (e: Exception) {
-                        XposedBridge.log("failed to get request url")
+                        XposedBridge.log("Failed to get request url")
                     }
                 }
             }
