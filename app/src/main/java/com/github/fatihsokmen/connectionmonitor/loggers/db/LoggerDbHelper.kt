@@ -7,7 +7,7 @@ import com.github.fatihsokmen.connectionmonitor.loggers.db.DbLoggerContract.TABL
 
 /**
  * I will skip slqdelight and room as module has a simple logging structure
- * and I will use standard android sqlite db to avoid additional compile time dependencies
+ * and I will use standard android sqlite db approach to avoid additional compile time dependencies
  */
 object DbLoggerContract {
     const val TABLE_NAME = "url_logs"
@@ -32,6 +32,9 @@ class LoggerDbHelper(context: Context) :
         db.execSQL(SQL_CREATE_ENTRIES)
     }
 
+    /**
+     * We delete all rows on upgrade
+     */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL(SQL_DELETE_ENTRIES)
         onCreate(db)

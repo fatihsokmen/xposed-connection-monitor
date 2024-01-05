@@ -48,7 +48,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.xposed.api)
-    testImplementation("io.mockk:mockk:1.12.8")
+    testImplementation(libs.mockk)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
 }

@@ -17,7 +17,6 @@ class UrlConnectionHook(
             String::class.java,
             handler
         )
-
     }
 
     class Handler(private val logger: UrlLogger) : MethodHook() {
