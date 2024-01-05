@@ -45,7 +45,7 @@ class OkHttpConnectionHookTest {
     private val subject = OkHttpConnectionHook(facade, handler, ClassLoader.getSystemClassLoader())
 
     @Test
-    fun `GIVEN X WHEN Y THEN Z`() {
+    fun `GIVEN OkHttpConnectionHook WHEN installed THEN url should be logged`() {
         subject.install()
 
         verify {
