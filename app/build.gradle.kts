@@ -39,7 +39,6 @@ android {
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     compileOnly(libs.xposed.api)
-    compileOnly("de.robv.android.xposed:api:82:sources")
     compileOnly(libs.volley)
     compileOnly(libs.okhttp)
 
@@ -50,6 +49,4 @@ dependencies {
     testImplementation(libs.xposed.api)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
-
-    androidTestImplementation(libs.androidx.test.ext.junit)
 }
