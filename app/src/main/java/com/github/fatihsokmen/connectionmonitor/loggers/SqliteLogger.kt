@@ -8,10 +8,7 @@ import org.koin.core.component.KoinComponent
 
 class SqliteLogger(private val db: DatabaseFacade) : Logger, KoinComponent {
     override fun log(url: String) {
-        val values = ContentValues().apply {
-            put(DbLoggerContract.Entry.URL, url)
-        }
-        db.insert(DbLoggerContract.TABLE_NAME, values)
+        db.insert(url)
     }
 }
 
@@ -21,11 +18,15 @@ class SqliteLogger(private val db: DatabaseFacade) : Logger, KoinComponent {
  */
 class DatabaseFacade {
 
-    private val dbHelper by lazy {
+    // Open for testing
+    val db by lazy {
         LoggerDbHelper(AndroidAppHelper.currentApplication()).writableDatabase
     }
 
-    fun insert(table: String, row: ContentValues) {
-        dbHelper.insert(table, null, row)
+    fun insert(url: String) {
+        val row = ContentValues().apply {
+            put(DbLoggerContract.Entry.URL, url)
+        }
+        db.insert(DbLoggerContract.TABLE_NAME, null, row)
     }
 }

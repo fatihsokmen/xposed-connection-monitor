@@ -1,5 +1,6 @@
 package com.github.fatihsokmen.connectionmonitor.loggers
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -10,21 +11,17 @@ import kotlinx.coroutines.launch
  */
 class UrlLogger(
     private val sqliteLogger: SqliteLogger,
-    private val consoleLogger: ConsoleLogger
+    private val consoleLogger: ConsoleLogger,
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job())
 ) {
-    /**
-     * Scope for io operations, not to block main thread
-     */
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
-
     /**
      * Run loggers in separate coroutines, order is not important
      */
     fun log(url: String) {
-        scope.launch {
+        coroutineScope.launch {
             consoleLogger.log(url)
         }
-        scope.launch {
+        coroutineScope.launch {
             sqliteLogger.log(url)
         }
     }
