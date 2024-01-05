@@ -1,31 +1,34 @@
 package com.github.fatihsokmen.connectionmonitor.hooks
 
 import com.github.fatihsokmen.connectionmonitor.loggers.UrlLogger
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.XC_MethodHook as MethodHook
+import de.robv.android.xposed.XposedBridge
 
-class OkkHttpConnectionHook(private val classLoader: ClassLoader, private val logger: UrlLogger) :
-    ConnectionHook {
+class OkHttpConnectionHook(
+    private val xposedFacade: XposedHelpersFacade,
+    private val handler: OkHttpConnectionHook.Handler,
+    private val classLoader: ClassLoader,
+) : ConnectionHook {
 
     override fun install() {
-        val exchange = XposedHelpers.findClassIfExists(
+        val exchange = xposedFacade.findClassIfExists(
             "okhttp3.internal.connection.Exchange",
             classLoader
         )
 
-        XposedHelpers.findAndHookMethod(
+        xposedFacade.findAndHookMethod(
             exchange,
             "writeRequestHeaders",
             "okhttp3.Request",
-            Handler(logger)
+            handler
         )
     }
 
-    class Handler(private val logger: UrlLogger) : MethodHook() {
+    class Handler(private val xposedFacade: XposedHelpersFacade, private val logger: UrlLogger) :
+        MethodHook() {
         public override fun beforeHookedMethod(param: MethodHookParam) {
             try {
-                val url = XposedHelpers.getObjectField(param.args[0], "url").toString()
+                val url = xposedFacade.getObjectField(param.args[0], "url").toString()
                 logger.log(url)
             } catch (e: Exception) {
                 XposedBridge.log("Failed to get request url")
