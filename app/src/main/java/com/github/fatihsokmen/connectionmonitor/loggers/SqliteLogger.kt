@@ -17,7 +17,7 @@ class SqliteLogger(private val db: DatabaseFacade) : Logger, KoinComponent {
 
 /**
  * We need this because [android.content.Context] is not immediately available when
- * dependency graph is being create.
+ * dependency graph is been created.
  */
 class DatabaseFacade {
 

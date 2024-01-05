@@ -10,11 +10,15 @@ import org.koin.core.component.KoinComponent
 class UrlConnectionMonitorModule : IXposedHookLoadPackage, KoinComponent {
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam?) {
+        if (!lpparam?.packageName.equals("com.datatheorem.xposedtest"))
+            return
+
         if (lpparam?.classLoader != null) {
             crateModuleComponent(lpparam.classLoader)
             installHooks()
         } else {
             XposedBridge.log("Xposed module cannot be installed as class loader is null")
+            return
         }
     }
 

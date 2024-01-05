@@ -18,16 +18,18 @@ class OkkHttpConnectionHook(private val classLoader: ClassLoader, private val lo
             exchange,
             "writeRequestHeaders",
             "okhttp3.Request",
-            object : MethodHook() {
-                override fun beforeHookedMethod(param: MethodHookParam?) {
-                    try {
-                        val url = XposedHelpers.getObjectField(param!!.args[0], "url").toString()
-                        logger.log(url)
-                    } catch (e: Exception) {
-                        XposedBridge.log("Failed to get request url")
-                    }
-                }
-            }
+            Handler(logger)
         )
+    }
+
+    class Handler(private val logger: UrlLogger) : MethodHook() {
+        public override fun beforeHookedMethod(param: MethodHookParam) {
+            try {
+                val url = XposedHelpers.getObjectField(param.args[0], "url").toString()
+                logger.log(url)
+            } catch (e: Exception) {
+                XposedBridge.log("Failed to get request url")
+            }
+        }
     }
 }
